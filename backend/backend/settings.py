@@ -10,6 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+
+import dj_database_url
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from pathlib import Path
 import os
 from datetime import timedelta
@@ -22,12 +28,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-s1ehej_z^ktpl8a6fhe$7btb%@x%_st6m9$0xsj-86=&z9!dcd'
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -80,14 +86,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ecommerce_db',
-        'USER': 'root',
-        'PASSWORD': 'StrongPass@123',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
+    "default": dj_database_url.parse(
+        os.getenv("DATABASE_URL")
+    )
 }
 
 
