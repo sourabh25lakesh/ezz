@@ -8,22 +8,27 @@ function useScrollReveal(containerRef) {
     const container = containerRef.current;
     if (!container) return;
 
-    const cards = container.querySelectorAll(".reveal-card");
+    // Target all product cards within the grid
+    const cards = container.querySelectorAll(".product-card-link");
+    if (cards.length === 0) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add("opacity-100", "translate-y-0");
-            entry.target.classList.remove("opacity-0", "translate-y-10");
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
             observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
 
-    cards.forEach((card, i) => {
-      card.style.transitionDelay = `${(i % 4) * 80}ms`;
+    cards.forEach((card) => {
+      card.style.opacity = "0";
+      card.style.transform = "translateY(20px)";
+      card.style.transition = "opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)";
       observer.observe(card);
     });
 
@@ -143,27 +148,46 @@ function ProductList() {
         .logo-wrap:hover .logo-top { transform: translateY(-110%); }
         .logo-wrap:hover .logo-bot { transform: translateY(0); }
 
-        /* Card image zoom */
-        .card-img-wrap img {
-          transition: transform 0.55s cubic-bezier(0.22,1,0.36,1);
+        /* Products Section - Modern Grid */
+        .products-section {
+          padding: 32px;
+          background: #f5f5f5;
         }
-        .card-img-wrap:hover img { transform: scale(1.06); }
 
-        /* Reveal card - START VISIBLE, animate on scroll */
-        .reveal-card {
-          opacity: 1 !important;
-          transform: translateY(0) !important;
-        }
-        .reveal-card.is-hidden {
-          opacity: 0;
-          transform: translateY(20px);
-          transition: opacity 0.7s ease-out, transform 0.7s cubic-bezier(0.22,1,0.36,1);
+        .products-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 20px;
+          max-width: 1400px;
+          margin: 0 auto;
         }
 
         /* Scrollbar */
         ::-webkit-scrollbar       { width: 5px; }
         ::-webkit-scrollbar-track { background: white; }
         ::-webkit-scrollbar-thumb { background: black; border-radius: 3px; }
+
+        /* Tablet */
+        @media (max-width: 1024px) {
+          .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+          }
+          .products-section {
+            padding: 24px;
+          }
+        }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+          .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+          }
+          .products-section {
+            padding: 16px;
+          }
+        }
       `}</style>
 
       {/* ─────────────── HEADER ─────────────── */}
@@ -190,27 +214,40 @@ function ProductList() {
       </div>
 
       {/* ─────────────── HERO ─────────────── */}
-      <section className="relative px-8 pt-20 pb-14 overflow-hidden">
-        <div className="hero-rule" />
+      <section 
+        className="relative px-8 pt-20 pb-20 overflow-hidden min-h-[600px] flex flex-col justify-center"
+        style={{
+          backgroundImage: 'url(https://img.magnific.com/premium-psd/black-fashion…are-neon-green-theme-sale_1048816-2774.jpg?w=1480)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/40" />
+        
+        <div className="relative z-10">
+          <div className="hero-rule" style={{right: '2.5rem', borderColor: 'white'}} />
 
-        <div className="overflow-hidden leading-none">
-          <div className="font-display text-[clamp(3.5rem,9vw,9rem)] tracking-wide hero-line-1">
-            Curated
+          <div className="overflow-hidden leading-none">
+            <div className="font-display text-[clamp(4rem,10vw,10rem)] tracking-wider hero-line-1 font-bold text-white drop-shadow-lg" style={{textShadow: '2px 4px 12px rgba(0,0,0,0.6)'}}>
+              Curated
+            </div>
           </div>
-        </div>
-        <div className="overflow-hidden leading-none">
-          <div className="font-display text-[clamp(3.5rem,9vw,9rem)] tracking-wide hero-line-2">
-            Selection
+          <div className="overflow-hidden leading-none">
+            <div className="font-display text-[clamp(4rem,10vw,10rem)] tracking-wider hero-line-2 font-bold text-white drop-shadow-lg" style={{textShadow: '2px 4px 12px rgba(0,0,0,0.6)'}}>
+              Selection
+            </div>
           </div>
-        </div>
-        <div className="overflow-hidden leading-none">
-          <div className="font-display text-[clamp(3.5rem,9vw,9rem)] tracking-wide hero-line-3">
-            For You
+          <div className="overflow-hidden leading-none">
+            <div className="font-display text-[clamp(4rem,10vw,10rem)] tracking-wider hero-line-3 font-bold text-white drop-shadow-lg" style={{textShadow: '2px 4px 12px rgba(0,0,0,0.6)'}}>
+              For You
+            </div>
           </div>
+          <p className="hero-sub mt-8 text-[0.85rem] tracking-[0.22em] uppercase text-white font-semibold" style={{textShadow: '1px 2px 8px rgba(0,0,0,0.6)'}}>
+            Explore · Discover · Own
+          </p>
         </div>
-        <p className="hero-sub mt-6 text-[0.7rem] tracking-[0.2em] uppercase text-gray-400">
-          Explore · Discover · Own
-        </p>
       </section>
 
       {/* ─────────────── LOADING ─────────────── */}
@@ -235,16 +272,16 @@ function ProductList() {
       {!loading && !error && (
         <>
           {/* Filter bar */}
-          <div className="flex items-center gap-2 px-8 py-4 border-y-2 border-black overflow-x-auto">
-            <span className="text-[0.62rem] tracking-[0.18em] uppercase text-gray-400 mr-3 whitespace-nowrap">
+          <div className="flex w-[100% ] items-center justify-center      gap-6 px-8 py-2 mb-8    overflow-x-auto">
+            <span className="text-[0.62rem] tracking-[0.18em] uppercase text-gray-400 whitespace-nowrap">
               Filter
             </span>
             {["All", "New", "Sale", "Top Rated"].map((f, i) => (
               <button
                 key={f}
                 className={`btn-sweep${i === 0 ? " active" : ""}
-                  border-2 border-black text-[0.65rem] tracking-[0.14em]
-                  uppercase px-4 py-2 whitespace-nowrap`}
+                  border-2 rounded-lg  border-gray-200 text-[0.65rem] tracking-[0.14em]
+                  uppercase px-5 py-2 whitespace-nowrap`}
               >
                 <span>{f}</span>
               </button>
@@ -252,31 +289,11 @@ function ProductList() {
           </div>
 
           {/* Product grid */}
-          <div className="p-6" ref={gridRef}>
+          <div className="products-section" ref={gridRef}>
             {products.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4
-                              gap-3 bg-black border-2 border-black">
-                {products.map((product, i) => (
-                  <div
-                    key={product.id}
-                    className="reveal-card relative bg-white
-                               transition-all duration-700 ease-out group"
-                  >
-                    {/* Index label */}
-                    <span className="absolute top-3 left-3 z-10 font-display text-[0.6rem]
-                                     tracking-widest text-gray-400 pointer-events-none select-none">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-
-                    {/* Subtle overlay on hover */}
-                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-[0.03]
-                                    transition-opacity duration-300 pointer-events-none z-[1]" />
-
-                    {/* ProductCard rendered inside image-zoom wrapper */}
-                    <div className="card-img-wrap">
-                      <ProductCard product={product} />
-                    </div>
-                  </div>
+              <div className="products-grid">
+                {products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
                 ))}
               </div>
             ) : (
