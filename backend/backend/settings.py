@@ -56,10 +56,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware', 
-    'corsheaders.middleware.CorsMiddleware',  
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -147,6 +146,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
     "http://127.0.0.1:5175",
+
+    # Render Frontend
+    "https://ezz-9hff.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -172,6 +174,7 @@ SESSION_COOKIE_AGE = 1209600  # 2 weeks
 CSRF_COOKIE_SECURE = True # Set to True in production with HTTPS
 CSRF_COOKIE_HTTPONLY = False  # Must be False for CSRF token to be accessible
 CSRF_COOKIE_SAMESITE = 'Lax'
+
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost:5173",
@@ -181,6 +184,9 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "http://127.0.0.1:5174",
     "http://127.0.0.1:5175",
+
+    # Render Frontend
+    "https://ezz-9hff.onrender.com",
 ]
 
 SIMPLE_JWT ={
