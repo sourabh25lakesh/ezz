@@ -88,6 +88,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # Database
@@ -185,8 +186,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5174",
     "http://127.0.0.1:5175",
 
-    # Render Frontend
     "https://ezz-9hff.onrender.com",
+    "https://ezz-backend.onrender.com",
 ]
 
 SIMPLE_JWT ={
