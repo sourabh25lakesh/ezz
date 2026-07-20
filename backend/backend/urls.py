@@ -29,6 +29,7 @@ def home(request):
 
 
 urlpatterns = [
+    path("", home, name="home"),
     path('admin/', admin.site.urls),
     path('api/', include('store.urls')),
 
